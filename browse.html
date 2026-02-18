@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Browse Items</title>
+  <title>Browse Items | Share Hub</title>
   <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
 
 <header class="navbar">
@@ -20,16 +21,12 @@
 
   <!-- SEARCH + FILTER BAR -->
   <section class="filter-bar">
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="🔍 Search books, calculators..."
-    />
+    <input type="text" id="searchInput" placeholder="🔍 Search books, calculators...">
 
     <select id="categoryFilter">
       <option value="all">All Categories</option>
-      <option value="book">Electronics</option>
-      <option value="calculator">Study material</option>
+      <option value="electronics">Electronics</option>
+      <option value="study">Study material</option>
     </select>
 
     <select id="priceSort">
@@ -39,18 +36,13 @@
     </select>
   </section>
 
-  <!-- PRODUCTS -->
+  <!-- PRODUCTS GRID -->
   <section class="product-grid" id="items"></section>
 
 </main>
 
-<script src="item.js"></script>
+<!-- ONLY ONE SCRIPT -->
+<script src="browse.js"></script>
 
-
-<script src="item.js"></script>
-
-
-<script src="item.js"></script>
-<script src="swift.js"></script>
 </body>
 </html>
