@@ -15,7 +15,7 @@ form.addEventListener("submit", async (e) => {
   };
 
   try {
-    const res = await fetch("https://sharehub-backend-lm98.onrender.com/api/items/all", {
+    const res = await fetch("https://sharehub-backend-lm98.onrender.com/api/items/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(itemData),
