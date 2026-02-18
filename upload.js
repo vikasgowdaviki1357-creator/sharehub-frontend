@@ -1,30 +1,50 @@
 const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
-const form = document.querySelector("form");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
 
-  const itemData = {
-    name: document.getElementById("name").value,
-    category: document.getElementById("category").value,
-    price: document.getElementById("price").value,
-    yearUsed: document.getElementById("yearUsed").value,
-    phone: document.getElementById("phone").value,
-    image: document.getElementById("image").value,
-    sellerEmail: localStorage.getItem("userEmail"),
-  };
+  const form = document.getElementById("uploadForm");
 
-  try {
-    const res = await fetch("https://sharehub-backend-lm98.onrender.com/api/items/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(itemData),
-    });
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    const data = await res.json();
-    alert(data.message);
-    form.reset();
-  } catch (err) {
-    alert("Error uploading item");
-  }
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (!currentUser) {
+      alert("Please login again");
+      return;
+    }
+
+    const itemData = {
+      name: document.getElementById("name").value,
+      category: document.getElementById("category").value,
+      price: document.getElementById("price").value,
+      yearsUsed: document.getElementById("yearsUsed").value,
+      phone: document.getElementById("phone").value,
+      image: document.getElementById("image").value,
+      sellerEmail: currentUser.email,
+      sold: false
+    };
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/items/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(itemData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Item uploaded successfully!");
+        window.location.href = "browse.html";
+      } else {
+        alert(data.message || "Upload failed");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
+    }
+  });
+
 });

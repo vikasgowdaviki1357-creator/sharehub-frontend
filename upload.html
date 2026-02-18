@@ -8,7 +8,6 @@
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <header class="navbar">
   <div class="logo">❤ SHARE HUB</div>
   <nav>
@@ -18,7 +17,6 @@
   </nav>
 </header>
 
-<!-- ================= UPLOAD PAGE ================= -->
 <section class="upload-bg">
   <div class="upload-overlay"></div>
 
@@ -29,15 +27,10 @@
     <form id="uploadForm">
 
       <input type="text" id="name" placeholder="Product Name" required>
-
-      <input type="text" id="category" placeholder="Category (electronics/ study material)" required>
-
+      <input type="text" id="category" placeholder="Category" required>
       <input type="number" id="price" placeholder="Price (₹)" required>
-
       <input type="number" id="yearsUsed" placeholder="Used for how many years?" required>
-
       <input type="tel" id="phone" placeholder="Seller Phone Number" required>
-
       <input type="text" id="image" placeholder="Image URL (paste link here)" required>
 
       <button type="submit" class="upload-btn">
@@ -49,54 +42,7 @@
 </section>
 
 <script src="auth.js"></script>
-
-<script>
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
-
-document.getElementById("uploadForm").addEventListener("submit", async function(e) {
-  e.preventDefault(); // 🚀 VERY IMPORTANT (stops refresh)
-
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) {
-    alert("Please login again");
-    return;
-  }
-
-  const itemData = {
-    name: document.getElementById("name").value,
-    category: document.getElementById("category").value,
-    price: document.getElementById("price").value,
-    yearsUsed: document.getElementById("yearsUsed").value, // ✅ FIXED
-    phone: document.getElementById("phone").value,
-    image: document.getElementById("image").value,
-    sellerEmail: currentUser.email,
-    sold: false
-  };
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/items/add`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(itemData)
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert("Item uploaded successfully!");
-      window.location.href = "browse.html";
-    } else {
-      alert(data.message || "Upload failed");
-    }
-
-  } catch (error) {
-    console.error(error);
-    alert("Server error");
-  }
-});
-</script>
+<script src="upload.js"></script>
 
 </body>
 </html>
