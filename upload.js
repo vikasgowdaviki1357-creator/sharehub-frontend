@@ -1,18 +1,26 @@
 const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
 
-document.addEventListener("DOMContentLoaded", () => {
+const form = document.getElementById("uploadForm");
 
-  const form = document.getElementById("uploadForm");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) {
+    alert("Please login again");
+    return;
+  }
 
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const file = document.getElementById("image").files[0];
 
-    if (!currentUser) {
-      alert("Please login again");
-      return;
-    }
+  if (!file) {
+    alert("Please select an image");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = async function () {
 
     const itemData = {
       name: document.getElementById("name").value,
@@ -20,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: document.getElementById("price").value,
       yearsUsed: document.getElementById("yearsUsed").value,
       phone: document.getElementById("phone").value,
-      image: document.getElementById("image").value,
+      image: reader.result, // 🔥 BASE64 IMAGE
       sellerEmail: currentUser.email,
       sold: false
     };
@@ -28,14 +36,17 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch(`${BASE_URL}/api/items/add`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(itemData),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(itemData)
       });
 
       const data = await res.json();
 
       if (res.ok) {
         alert("Item uploaded successfully!");
+        form.reset();
         window.location.href = "browse.html";
       } else {
         alert(data.message || "Upload failed");
@@ -45,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       alert("Server error");
     }
-  });
+  };
 
+  reader.readAsDataURL(file); // 🔥 convert image to base64
 });

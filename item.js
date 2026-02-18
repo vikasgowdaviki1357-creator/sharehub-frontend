@@ -1,25 +1,37 @@
 const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+
 const itemsBox = document.getElementById("items");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const priceSort = document.getElementById("priceSort");
 
-let items = JSON.parse(localStorage.getItem("items")) || [];
+let items = [];
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+/* ================= LOAD ITEMS FROM BACKEND ================= */
+
+async function loadItems() {
+  try {
+    const response = await fetch(`${BASE_URL}/api/items/all`);
+    items = await response.json();
+    renderItems(items);
+  } catch (error) {
+    console.error("Error loading items:", error);
+    itemsBox.innerHTML = "<p>Failed to load items.</p>";
+  }
+}
 
 /* ================= RENDER ITEMS ================= */
 
 function renderItems(list) {
   itemsBox.innerHTML = "";
 
-  if (list.length === 0) {
-    itemsBox.innerHTML = "<p>No matching items found.</p>";
+  if (!list || list.length === 0) {
+    itemsBox.innerHTML = "<p>No items found.</p>";
     return;
   }
 
   list.forEach((item) => {
-
-    const realIndex = items.indexOf(item); // 🔥 Fix index bug when filtering
 
     const card = document.createElement("div");
     card.className = "product-card";
@@ -65,7 +77,7 @@ function renderItems(list) {
         currentUser.email === item.sellerEmail &&
         !item.sold
           ? `
-            <button onclick="markAsSold(${realIndex})"
+            <button onclick="markAsSold('${item._id}')"
               style="margin-top:12px;padding:8px 12px;border:none;border-radius:8px;background:#ef4444;color:white;cursor:pointer;">
               Mark as Sold
             </button>
@@ -78,12 +90,18 @@ function renderItems(list) {
   });
 }
 
-/* ================= MARK AS SOLD ================= */
+/* ================= MARK AS SOLD (BACKEND) ================= */
 
-function markAsSold(index) {
-  items[index].sold = true;
-  localStorage.setItem("items", JSON.stringify(items));
-  renderItems(items);
+async function markAsSold(id) {
+  try {
+    await fetch(`${BASE_URL}/api/items/sold/${id}`, {
+      method: "PUT"
+    });
+
+    loadItems(); // refresh from DB
+  } catch (error) {
+    console.error("Error marking sold:", error);
+  }
 }
 
 /* ================= FILTER SYSTEM ================= */
@@ -126,4 +144,4 @@ if (priceSort) priceSort.addEventListener("change", applyFilters);
 
 /* ================= INITIAL LOAD ================= */
 
-renderItems(items);
+loadItems();
