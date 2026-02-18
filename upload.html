@@ -53,43 +53,44 @@
 <script>
 const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
 
-document.getElementById("uploadForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
+document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // 🚀 VERY IMPORTANT – stops refresh
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) {
-    alert("Please login again");
-    return;
-  }
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (!currentUser) {
+        alert("Please login again");
+        return;
+    }
 
-  const itemData = {
-    name: document.getElementById("name").value,
-    category: document.getElementById("category").value,
-    price: document.getElementById("price").value,
-    yearsUsed: document.getElementById("yearsUsed").value,
-    phone: document.getElementById("phone").value,
-    image: document.getElementById("image").value,
-    sellerEmail: currentUser.email
-  };
+    const itemData = {
+        name: document.getElementById("name").value,
+        category: document.getElementById("category").value,
+        price: document.getElementById("price").value,
+        yearsUsed: document.getElementById("years").value,
+        phone: document.getElementById("phone").value,
+        image: document.getElementById("image").value, // image URL
+        sellerEmail: currentUser.email,
+        sold: false
+    };
 
-  try {
-    const response = await fetch(`${BASE_URL}/api/items/add`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(itemData)
-    });
+    try {
+        const response = await fetch(`${BASE_URL}/api/items/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(itemData)
+        });
 
-    const data = await response.json();
-    alert(data.message);
+        const data = await response.json();
 
-    window.location.href = "browse.html";
+        alert("Item uploaded successfully!");
+        window.location.href = "browse.html";
 
-  } catch (error) {
-    console.error(error);
-    alert("Upload failed");
-  }
+    } catch (error) {
+        console.error(error);
+        alert("Upload failed");
+    }
 });
 </script>
 
