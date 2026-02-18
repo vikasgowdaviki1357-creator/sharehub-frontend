@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> Share Hub</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="logo">SHARE HUB</div>
+  <nav id="navLinks"></nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="space-hero">
+  <div class="space-overlay"></div>
+  <div class="space-content">
+    <h1> SHARE HUB </h1>
+    <p>
+      Donate, request, and exchange study materials with seniors and juniors.
+      Build your academic community.
+    </p>
+    <a href="signup.html" class="space-btn">Get Started</a>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<main class="main">
+  <section class="features">
+    <div class="feature-card">
+      <h3>📚 Donate Items</h3>
+      <p>Share your unused study materials.</p>
+    </div>
+    <div class="feature-card">
+      <h3>📝 Request Materials</h3>
+      <p>Ask seniors for books.</p>
+    </div>
+    <div class="feature-card">
+      <h3>🔄 Exchange</h3>
+      <p>Completely free sharing.</p>
+    </div>
+    <div class="feature-card">
+      <h3>💬 Connect</h3>
+      <p>Chat with students.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2025 JIT Share Hub
+</footer>
+
+<!-- ================= ROLE MODAL ================= -->
+<div id="roleModal" class="role-overlay" style="display:none">
+  <div class="role-card">
+    <h2>Choose Your Role ✨</h2>
+    <p class="role-subtitle">
+      Tell us how you want to explore JIT Share Hub
+    </p>
+
+    <div class="role-options">
+      <div class="role-box senior" onclick="setUserRole('senior')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        <h3>Senior</h3>
+        <p>Upload & share materials</p>
+      </div>
+ 
+      <div class="role-box junior" onclick="setUserRole('junior')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png">
+        <h3>Junior</h3>
+        <p>Request & explore</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="auth.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const nav = document.getElementById("navLinks");
+  const roleModal = document.getElementById("roleModal");
+
+  const userRaw = localStorage.getItem("currentUser");
+  const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+
+  nav.innerHTML = `<a href="browse.html">Browse</a>`;
+
+  // ❌ Not logged in
+  if (!userRaw) {
+    nav.innerHTML += `<a href="login.html" class="btn">Login</a>`;
+    return;
+  }
+
+  const user = JSON.parse(userRaw);
+
+  // Navbar options
+  if (user.selectedRole === "senior") {
+    nav.innerHTML += `<a href="upload.html">Upload</a>`;
+  }
+
+  nav.innerHTML += `<a href="#" class="btn" onclick="logout()">Logout</a>`;
+
+  // ✅ SHOW ROLE MODAL ONLY ON FIRST LOGIN
+  if (
+    justLoggedIn === "true" &&
+    !user.selectedRole &&
+    user.role !== "admin"
+  ) {
+    roleModal.style.display = "flex";
+    sessionStorage.removeItem("justLoggedIn");
+  }
+});
+
+function setUserRole(role) {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  user.selectedRole = role;
+  localStorage.setItem("currentUser", JSON.stringify(user));
+  location.reload();
+}
+</script>
+<script>
+async function loadProducts() {
+    const response = await fetch("https://sharehub-backend-lm98.onrender.com/api/items/all");
+    const products = await response.json();
+
+    const container = document.getElementById("products");
+    container.innerHTML = "";
+
+    products.forEach(item => {
+        container.innerHTML += `
+            <div style="border:1px solid black; padding:10px; margin:10px;">
+                <h3>${item.name}</h3>
+                <p>Category: ${item.category}</p>
+                <p>Price: ₹${item.price}</p>
+                <p>Used: ${item.yearsUsed} years</p>
+                <p>Phone: ${item.phone}</p>
+                <p>Status: ${item.sold ? "Sold ❌" : "Available ✅"}</p>
+            </div>
+        `;
+    });
+}
+
+loadProducts();
+</script>
+
+</body>
+</html>

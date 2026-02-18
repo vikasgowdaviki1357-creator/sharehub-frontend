@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Seller Profile | Share Hub</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#f8fafc,#e2e8f0);
+}
+
+.navbar {
+  background: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  text-align: center;
+  max-width: 500px;
+  margin: 40px auto;
+}
+
+.profile-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 4px solid #2563eb;
+}
+
+.items-grid {
+  display: grid;
+  gap: 25px;
+  grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+  padding: 40px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.price {
+  color: #2563eb;
+  font-weight: bold;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <strong>👤 Seller Profile</strong>
+  <a href="browse.html">⬅ Back</a>
+</header>
+
+<div class="profile-card">
+  <img id="sellerProfilePic">
+  <h2 id="sellerEmail"></h2>
+  <p id="sellerPhone"></p>
+  <p id="itemCount"></p>
+  <div id="ratingStars"></div>
+  <p id="ratingValue"></p>
+</div>
+
+<div class="items-grid" id="sellerItems"></div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const email = params.get("email");
+
+const items = JSON.parse(localStorage.getItem("items")) || [];
+const users = JSON.parse(localStorage.getItem("users")) || [];
+
+const sellerItems = items.filter(i => i.sellerEmail === email);
+const sellerUser = users.find(u => u.email === email);
+
+/* PROFILE IMAGE */
+
+const profileImg = document.getElementById("sellerProfilePic");
+
+if (sellerUser && sellerUser.profileImage) {
+  profileImg.src = sellerUser.profileImage;
+} else {
+  profileImg.src =
+    "https://ui-avatars.com/api/?name=" + email + "&background=2563eb&color=fff";
+}
+
+/* SELLER INFO */
+
+document.getElementById("sellerEmail").innerText = email;
+document.getElementById("itemCount").innerText =
+  "Total Items: " + sellerItems.length;
+
+if (sellerItems.length > 0) {
+  document.getElementById("sellerPhone").innerText =
+    "📞 " + sellerItems[0].phone;
+}
+
+/* RATING SYSTEM */
+
+const ratingKey = "ratings_" + email;
+let ratings = JSON.parse(localStorage.getItem(ratingKey)) || [];
+
+function renderStars() {
+  const container = document.getElementById("ratingStars");
+  container.innerHTML = "";
+
+  const avg =
+    ratings.length > 0
+      ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+      : 0;
+
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement("span");
+    star.innerHTML = "★";
+    star.style.fontSize = "28px";
+    star.style.cursor = "pointer";
+    star.style.margin = "5px";
+    star.style.color = i <= avg ? "#facc15" : "#cbd5e1";
+
+    star.onclick = () => {
+      ratings.push(i);
+      localStorage.setItem(ratingKey, JSON.stringify(ratings));
+      renderStars();
+    };
+
+    container.appendChild(star);
+  }
+
+  document.getElementById("ratingValue").innerText =
+    "Average Rating: " + avg + " ⭐ (" + ratings.length + " votes)";
+}
+
+renderStars();
+
+/* SELLER ITEMS */
+
+const box = document.getElementById("sellerItems");
+
+sellerItems.forEach(item => {
+  const div = document.createElement("div");
+  div.className = "product-card";
+
+  div.innerHTML = `
+    <img src="${item.image}">
+    <h3>${item.name}</h3>
+    <p>${item.category}</p>
+    <p>Used: ${item.yearsUsed} year(s)</p>
+    <div class="price">₹${item.price}</div>
+  `;
+
+  box.appendChild(div);
+});
+
+</script>
+
+</body>
+</html>

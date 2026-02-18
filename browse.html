@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Items</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">📦 Browse Items</div>
+  <nav>
+    <a href="upload.html">Upload</a>
+    <a href="chat.html">Chat</a>
+    <a href="index.html" class="btn">Home</a>
+  </nav>
+</header>
+
+<main class="main browse-bg">
+
+  <!-- SEARCH + FILTER BAR -->
+  <section class="filter-bar">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="🔍 Search books, calculators..."
+    />
+
+    <select id="categoryFilter">
+      <option value="all">All Categories</option>
+      <option value="book">Electronics</option>
+      <option value="calculator">Study material</option>
+    </select>
+
+    <select id="priceSort">
+      <option value="default">Sort by Price</option>
+      <option value="low">Low → High</option>
+      <option value="high">High → Low</option>
+    </select>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="product-grid" id="items"></section>
+
+</main>
+
+<script src="item.js"></script>
+
+
+<script src="item.js"></script>
+
+
+<script src="item.js"></script>
+<script src="swift.js"></script>
+</body>
+</html>

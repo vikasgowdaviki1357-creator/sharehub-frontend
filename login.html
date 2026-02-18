@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | JIT Share Hub</title>
+  <link rel="stylesheet" href="./css/style.css">
+
+  <style>
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .google-btn {
+      width: 100%;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body class="login-modern">
+
+<div id="particles-js"></div>
+
+<div class="login-container">
+
+  <div class="login-left">
+    <h1>Welcome Back 👋</h1>
+    <p>Login to continue sharing and connecting with students.</p>
+  </div>
+
+  <div class="login-card">
+
+    <h2>Sign In</h2>
+
+    <form onsubmit="login(); return false;">
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- REAL GOOGLE BUTTON -->
+    <div id="g_id_onload"
+         data-client_id="YOUR_CLIENT_ID_HERE"
+         data-callback="handleCredentialResponse">
+    </div>
+
+    <div class="google-btn">
+      <div class="g_id_signin"
+           data-type="standard"
+           data-size="large"
+           data-theme="outline"
+           data-text="continue_with"
+           data-shape="rectangular">
+      </div>
+    </div>
+
+    <p class="signup-text">
+      Don’t have an account?
+      <a href="signup.html">Create one</a>
+    </p>
+
+  </div>
+
+</div>
+
+<!-- GOOGLE SCRIPT -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<script>
+function handleCredentialResponse(response) {
+
+  const data = parseJwt(response.credential);
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  let user = users.find(u => u.email === data.email);
+
+  if (!user) {
+    user = {
+      email: data.email,
+      password: null,
+      role: "student",
+      profileImage: data.picture
+    };
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
+  localStorage.setItem("currentUser", JSON.stringify(user));
+  window.location.href = "index.html";
+}
+
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(atob(base64));
+}
+</script>
+
+<script src="auth.js"></script>
+
+</body>
+</html>

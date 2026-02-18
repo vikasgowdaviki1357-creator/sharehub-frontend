@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Role</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<div class="hero" style="width:350px">
+  <h2>Select Your Role</h2>
+  <p>Please choose how you want to continue</p>
+
+  <button class="primary-btn" onclick="selectRole('senior')">
+    I am a Senior
+  </button>
+  <br><br>
+  <button class="primary-btn" onclick="selectRole('junior')">
+    I am a Junior
+  </button>
+</div>
+
+<script>
+function selectRole(role) {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (!user) {
+    alert("Please login first");
+    window.location.href = "login.html";
+    return;
+  }
+
+  user.role = role;
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

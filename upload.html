@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Item | Share Hub</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="logo">❤ SHARE HUB</div>
+  <nav>
+    <a href="browse.html">Browse</a>
+    <a href="index.html">Home</a>
+    <a href="#" class="btn" onclick="logout()">Logout</a>
+  </nav>
+</header>
+
+<!-- ================= UPLOAD PAGE ================= -->
+<section class="upload-bg">
+  <div class="upload-overlay"></div>
+
+  <div class="upload-glass">
+    <h2>📦 Upload Product</h2>
+    <p class="upload-subtitle">Share your study materials with juniors</p>
+
+    <form onsubmit="addItem(); return false;">
+
+      <input type="text" id="name" placeholder="Product Name" required>
+
+      <input type="text" id="category" placeholder="Category (electronics/ study material)" required>
+
+      <input type="number" id="price" placeholder="Price (₹)" required>
+
+      <input type="number" id="years" placeholder="Used for how many years?" required>
+
+      <input type="tel" id="phone" placeholder="Seller Phone Number" required>
+
+      <label class="file-label">
+        📷 Upload Product Photo
+        <input type="file" id="image" accept="image/*" required>
+      </label>
+
+      <button type="submit" class="upload-btn">
+        Upload Item 🚀
+      </button>
+
+    </form>
+  </div>
+</section>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="auth.js"></script>
+
+<script>
+function addItem() {
+  const file = document.getElementById("image").files[0];
+  const reader = new FileReader();
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) {
+    alert("Please login again");
+    return;
+  }
+
+  reader.onload = function () {
+    const items = JSON.parse(localStorage.getItem("items")) || [];
+
+    items.push({
+  name: document.getElementById("name").value,
+  category: document.getElementById("category").value,
+  price: document.getElementById("price").value,
+  yearsUsed: document.getElementById("years").value,
+  phone: document.getElementById("phone").value,
+  image: reader.result,
+  sellerEmail: currentUser.email,
+  sold: false   // ✅ ADD THIS
+});
+
+    localStorage.setItem("items", JSON.stringify(items));
+    alert("Item uploaded successfully!");
+    window.location.href = "browse.html";
+  };
+
+  reader.readAsDataURL(file);
+}
+</script>
+<script>
+async function uploadProduct() {
+    const title = document.getElementById("title").value;
+    const price = document.getElementById("price").value;
+    const description = document.getElementById("description").value;
+
+    const response = await fetch("https://sharehub-backend-lm98.onrender.com/api/products", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title, price, description })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+}
+</script>
+
+</body>
+</html>
