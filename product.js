@@ -1,9 +1,9 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 async function loadProduct() {
-  const res = await fetch("https://sharehub-backend-lm98.onrender.com/api/items/all");
+  const res = await fetch(`${BASE_URL}/api/items/all`);
   const items = await res.json();
 
   const product = items.find((item) => item._id === id);

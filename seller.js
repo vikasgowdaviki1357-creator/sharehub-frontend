@@ -1,6 +1,7 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
+
 async function markSold(id) {
-  await fetch("https://sharehub-backend-lm98.onrender.com/api/items/sold/" + id, {
+  await fetch(`${BASE_URL}/api/items/sold/${id}`, {
     method: "PUT",
   });
 
@@ -9,7 +10,7 @@ async function markSold(id) {
 }
 
 async function loadSellerItems() {
-  const res = await fetch("https://sharehub-backend-lm98.onrender.com/api/items/all");
+  const res = await fetch(`${BASE_URL}/api/items/all`);
   const items = await res.json();
 
   const userEmail = localStorage.getItem("userEmail");

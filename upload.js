@@ -1,4 +1,4 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 
 const form = document.getElementById("uploadForm");
 
@@ -28,7 +28,7 @@ form.addEventListener("submit", async (e) => {
       price: document.getElementById("price").value,
       yearsUsed: document.getElementById("yearsUsed").value,
       phone: document.getElementById("phone").value,
-      image: reader.result, // 🔥 BASE64 IMAGE
+      image: reader.result,
       sellerEmail: currentUser.email,
       sold: false
     };
@@ -58,5 +58,5 @@ form.addEventListener("submit", async (e) => {
     }
   };
 
-  reader.readAsDataURL(file); // 🔥 convert image to base64
+  reader.readAsDataURL(file);
 });

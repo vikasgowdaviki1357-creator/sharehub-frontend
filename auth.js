@@ -1,4 +1,4 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 /* ================= SIGNUP ================= */
 function signup() {
   const email = document.getElementById("email").value.trim();

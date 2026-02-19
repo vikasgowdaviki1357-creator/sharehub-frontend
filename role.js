@@ -1,4 +1,4 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("roleModal");
   const userRaw = localStorage.getItem("currentUser");

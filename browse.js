@@ -1,4 +1,4 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 
 const itemsBox = document.getElementById("items");
 const searchInput = document.getElementById("searchInput");
@@ -14,7 +14,6 @@ async function loadProducts() {
 
     allItems = products;
     applyFilters();
-
   } catch (error) {
     console.error("Error loading products:", error);
   }

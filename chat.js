@@ -1,4 +1,4 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 // Get DOM elements safely
 const chatBox = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatText");

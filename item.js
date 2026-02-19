@@ -1,4 +1,4 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 
 const itemsBox = document.getElementById("items");
 const searchInput = document.getElementById("searchInput");
@@ -7,8 +7,6 @@ const priceSort = document.getElementById("priceSort");
 
 let items = [];
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-/* ================= LOAD ITEMS FROM BACKEND ================= */
 
 async function loadItems() {
   try {
@@ -21,8 +19,6 @@ async function loadItems() {
   }
 }
 
-/* ================= RENDER ITEMS ================= */
-
 function renderItems(list) {
   itemsBox.innerHTML = "";
 
@@ -32,7 +28,6 @@ function renderItems(list) {
   }
 
   list.forEach((item) => {
-
     const card = document.createElement("div");
     card.className = "product-card";
 
@@ -44,10 +39,9 @@ function renderItems(list) {
       ${item.sold ? `<div class="sold-badge">SOLD</div>` : ""}
 
       <img src="${item.image}" alt="${item.name}">
-
       <h3>${item.name}</h3>
 
-      <a href="seller.html?email=${item.sellerEmail}" 
+      <a href="seller.html?email=${item.sellerEmail}"
          style="color:#2563eb;font-weight:600">
          View Seller
       </a>
@@ -90,21 +84,17 @@ function renderItems(list) {
   });
 }
 
-/* ================= MARK AS SOLD (BACKEND) ================= */
-
 async function markAsSold(id) {
   try {
     await fetch(`${BASE_URL}/api/items/sold/${id}`, {
       method: "PUT"
     });
 
-    loadItems(); // refresh from DB
+    loadItems();
   } catch (error) {
     console.error("Error marking sold:", error);
   }
 }
-
-/* ================= FILTER SYSTEM ================= */
 
 function applyFilters() {
   let filtered = [...items];
@@ -136,12 +126,8 @@ function applyFilters() {
   renderItems(filtered);
 }
 
-/* ================= EVENTS ================= */
-
 if (searchInput) searchInput.addEventListener("input", applyFilters);
 if (categoryFilter) categoryFilter.addEventListener("change", applyFilters);
 if (priceSort) priceSort.addEventListener("change", applyFilters);
-
-/* ================= INITIAL LOAD ================= */
 
 loadItems();

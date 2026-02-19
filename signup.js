@@ -1,11 +1,10 @@
-const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
+const BASE_URL = "https://sharehub-backend-7sd0.onrender.com";
 
 document.getElementById("signupForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   let selectedRole = document.getElementById("role").value;
 
-  // Map correct values exactly for backend
   if (selectedRole === "seller") {
     selectedRole = "seller";
   } else if (selectedRole === "buyer") {
