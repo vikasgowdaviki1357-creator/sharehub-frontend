@@ -1,13 +1,20 @@
 const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
 
-document.getElementById("signupForm").addEventListener("submit", async function(e) {
+document.getElementById("signupForm").addEventListener("submit", async function (e) {
   e.preventDefault();
+
+  // FIXED ROLE VALUE TO MATCH BACKEND ENUM
+  const selectedRole = document.getElementById("role").value;
+  const role =
+    selectedRole === "seller" ? "Seller" :
+    selectedRole === "buyier" ? "Buyier" :
+    "";
 
   const userData = {
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
     password: document.getElementById("password").value,
-    role: document.getElementById("role").value
+    role: role
   };
 
   try {
@@ -18,7 +25,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     });
 
     const data = await res.json();
-    const role = document.getElementById("role").value;
+
     localStorage.setItem("userRole", role);
 
     if (res.ok) {
