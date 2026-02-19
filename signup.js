@@ -4,13 +4,14 @@ document.getElementById("signupForm").addEventListener("submit", async function(
   e.preventDefault();
 
   const userData = {
-    name: "User", // since you don't have name input
+    name: document.getElementById("name").value,
     email: document.getElementById("email").value,
     password: document.getElementById("password").value,
+    role: document.getElementById("role").value
   };
 
   try {
-    const res = await fetch(`${BASE_URL}/api/auth/signup`, { // ✅ FIXED ROUTE
+    const res = await fetch(`${BASE_URL}/api/auth/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
@@ -22,11 +23,10 @@ document.getElementById("signupForm").addEventListener("submit", async function(
       alert("Account created successfully!");
       window.location.href = "login.html";
     } else {
-      alert(data.message || "Signup failed");
+      alert(data.message);
     }
 
   } catch (err) {
-    console.error(err);
     alert("Server error");
   }
 });

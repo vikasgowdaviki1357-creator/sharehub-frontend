@@ -87,18 +87,22 @@ body::after {
 <div class="signup-card">
 
 <h2>Create Account</h2>
-
 <form id="signupForm">
 
-<input type="email" id="email" placeholder="Email ID" required>
-<input type="password" id="password" placeholder="Password" required>
+  <input type="text" id="name" placeholder="Full Name" required>
 
-<select id="role">
-  <option value="student">Student</option>
-  <option value="admin">Admin</option>
-</select>
+  <input type="email" id="email" placeholder="Email ID" required>
 
-<button type="submit">Sign Up</button>
+  <input type="password" id="password" placeholder="Password" required>
+
+  <!-- ROLE SELECT -->
+  <select id="role" required>
+    <option value="">Select Role</option>
+    <option value="student">Student</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <button type="submit">Sign Up</button>
 
 </form>
 
