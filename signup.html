@@ -132,10 +132,11 @@ document.getElementById("signupForm").addEventListener("submit", async function(
   e.preventDefault();
 
   const userData = {
-    name: "User",
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value
-  };
+  name: "User",
+  email: document.getElementById("email").value,
+  password: document.getElementById("password").value,
+  role: document.getElementById("role").value
+};
 
   try {
     const res = await fetch(`${BASE_URL}/api/auth/signup`, {
