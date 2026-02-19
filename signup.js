@@ -6,10 +6,10 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   let selectedRole = document.getElementById("role").value;
 
   // Map correct values exactly for backend
-  if (selectedRole === "Seller") {
-    selectedRole = "Seller";
-  } else if (selectedRole === "Buyier") {
-    selectedRole = "Buyier";
+  if (selectedRole === "seller") {
+    selectedRole = "seller";
+  } else if (selectedRole === "buyier") {
+    selectedRole = "buyier";
   } else {
     alert("Please select a valid role");
     return;
