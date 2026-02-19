@@ -8,8 +8,8 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   // Map correct values exactly for backend
   if (selectedRole === "seller") {
     selectedRole = "seller";
-  } else if (selectedRole === "buyier") {
-    selectedRole = "buyier";
+  } else if (selectedRole === "buyer") {
+    selectedRole = "buyer";
   } else {
     alert("Please select a valid role");
     return;
