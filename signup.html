@@ -83,7 +83,6 @@ body::after {
 </head>
 
 <body>
-<h1 style="color:red">TEST VERSION 2</h1>
 
 <div class="signup-card">
 
@@ -95,12 +94,16 @@ body::after {
   <input type="email" id="email" placeholder="Email ID" required>
 
   <input type="password" id="password" placeholder="Password" required>
+  <div class="input-group">
+  <label>Profile Picture</label>
+  <input type="file" accept="image/*" class="file-input" />
+  </div>
 
   <!-- ROLE SELECT -->
   <select id="role" required>
     <option value="">Select Role</option>
-    <option value="student">Student</option>
-    <option value="admin">Admin</option>
+    <option value="seller">Seller</option>
+    <option value="buyier">Buyier</option>
   </select>
 
   <button type="submit">Sign Up</button>

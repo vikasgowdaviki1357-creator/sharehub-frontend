@@ -18,6 +18,8 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     });
 
     const data = await res.json();
+    const role = document.getElementById("role").value;
+    localStorage.setItem("userRole", role);
 
     if (res.ok) {
       alert("Account created successfully!");

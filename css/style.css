@@ -1951,3 +1951,22 @@ body.login-modern {
   0% { transform: rotate(-20deg) scale(0); }
   100% { transform: rotate(-20deg) scale(1); }
 }
+.input-group {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    color: white;
+    margin-bottom: 6px;
+}
+
+.file-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: none;
+}

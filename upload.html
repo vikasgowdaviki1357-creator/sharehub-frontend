@@ -19,7 +19,8 @@
 <section class="upload-bg">
   <div class="upload-overlay"></div>
 
-  <div class="upload-glass">
+  <!-- Upload Section (protected for Seller only) -->
+  <div class="upload-glass" id="uploadSection">
     <h2>📦 Upload Product</h2>
 
     <form id="uploadForm">
@@ -40,6 +41,16 @@
 </section>
 
 <script src="upload.js"></script>
+
+<!-- 🔥 SELLER-ONLY ACCESS CONTROL (Added Code) -->
+<script>
+  const role = localStorage.getItem("userRole");
+
+  if (role !== "Seller") {
+      alert("Only sellers can upload items.");
+      window.location.href = "browse.html";
+  }
+</script>
 
 </body>
 </html>

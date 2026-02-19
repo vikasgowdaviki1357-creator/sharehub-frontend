@@ -62,6 +62,26 @@ body {
   font-weight: bold;
   margin-top: 10px;
 }
+
+.sold-tag {
+  background: #ef4444;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 10px;
+  display: inline-block;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.btn-sold {
+  background: #16a34a;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
 </style>
 </head>
 
@@ -84,40 +104,65 @@ body {
 <div class="items-grid" id="sellerItems"></div>
 
 <script>
+const BASE_URL = "https://sharehub-backend-lm98.onrender.com";
 
 const params = new URLSearchParams(window.location.search);
 const email = params.get("email");
 
-const items = JSON.parse(localStorage.getItem("items")) || [];
-const users = JSON.parse(localStorage.getItem("users")) || [];
-
-const sellerItems = items.filter(i => i.sellerEmail === email);
-const sellerUser = users.find(u => u.email === email);
-
-/* PROFILE IMAGE */
-
-const profileImg = document.getElementById("sellerProfilePic");
-
-if (sellerUser && sellerUser.profileImage) {
-  profileImg.src = sellerUser.profileImage;
-} else {
-  profileImg.src =
-    "https://ui-avatars.com/api/?name=" + email + "&background=2563eb&color=fff";
-}
-
-/* SELLER INFO */
-
 document.getElementById("sellerEmail").innerText = email;
-document.getElementById("itemCount").innerText =
-  "Total Items: " + sellerItems.length;
 
-if (sellerItems.length > 0) {
-  document.getElementById("sellerPhone").innerText =
-    "📞 " + sellerItems[0].phone;
+/* LOAD SELLER ITEMS FROM BACKEND */
+async function loadSellerItems() {
+  const res = await fetch(`${BASE_URL}/api/items/all`);
+  const items = await res.json();
+
+  const sellerItems = items.filter(i => i.sellerEmail === email);
+  const box = document.getElementById("sellerItems");
+
+  box.innerHTML = "";
+  document.getElementById("itemCount").innerText = "Total Items: " + sellerItems.length;
+
+  sellerItems.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+
+    div.innerHTML = `
+      <img src="${item.image}">
+      <h3>${item.name}</h3>
+      <p>${item.category}</p>
+      <p>Used: ${item.yearsUsed} year(s)</p>
+      <div class="price">₹${item.price}</div>
+
+      ${item.sold 
+        ? `<div class="sold-tag">SOLD</div>`
+        : `<button class="btn-sold" onclick="markSold('${item._id}')">Mark as Sold</button>`
+      }
+    `;
+
+    box.appendChild(div);
+  });
+
+  // Set phone number
+  if (sellerItems.length > 0) {
+    document.getElementById("sellerPhone").innerText = "📞 " + sellerItems[0].phone;
+  }
 }
 
-/* RATING SYSTEM */
+/* MARK AS SOLD BUTTON */
+async function markSold(id) {
+  await fetch(`${BASE_URL}/api/items/sold/` + id, {
+    method: "PUT",
+  });
 
+  alert("Marked as sold");
+  loadSellerItems();
+}
+
+/* DEFAULT PROFILE IMAGE */
+document.getElementById("sellerProfilePic").src =
+  "https://ui-avatars.com/api/?name=" + email + "&background=2563eb&color=fff";
+
+/* RATING SYSTEM (unchanged) */
 const ratingKey = "ratings_" + email;
 let ratings = JSON.parse(localStorage.getItem(ratingKey)) || [];
 
@@ -125,10 +170,9 @@ function renderStars() {
   const container = document.getElementById("ratingStars");
   container.innerHTML = "";
 
-  const avg =
-    ratings.length > 0
-      ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
-      : 0;
+  const avg = ratings.length > 0
+    ? (ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)
+    : 0;
 
   for (let i = 1; i <= 5; i++) {
     const star = document.createElement("span");
@@ -143,7 +187,6 @@ function renderStars() {
       localStorage.setItem(ratingKey, JSON.stringify(ratings));
       renderStars();
     };
-
     container.appendChild(star);
   }
 
@@ -152,26 +195,7 @@ function renderStars() {
 }
 
 renderStars();
-
-/* SELLER ITEMS */
-
-const box = document.getElementById("sellerItems");
-
-sellerItems.forEach(item => {
-  const div = document.createElement("div");
-  div.className = "product-card";
-
-  div.innerHTML = `
-    <img src="${item.image}">
-    <h3>${item.name}</h3>
-    <p>${item.category}</p>
-    <p>Used: ${item.yearsUsed} year(s)</p>
-    <div class="price">₹${item.price}</div>
-  `;
-
-  box.appendChild(div);
-});
-
+loadSellerItems();
 </script>
 
 </body>
